@@ -9,6 +9,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+from backend.api.convert import router as convert_router
+
 app = FastAPI(
     title="Novel2Script API",
     version="0.1.0",
@@ -21,6 +23,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(convert_router)
 
 
 class HealthResponse(BaseModel):
