@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Tanglaoye-future/novel2script/schema/screenplay.schema.json",
+  "title": "Screenplay",
+  "description": "Structured screenplay derived from a novel. v0.1",
+  "type": "object",
+  "required": ["meta", "characters", "scenes"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1",
+      "description": "Schema 版本号，便于未来字段演进时向后兼容"
+    },
+    "meta": {
+      "type": "object",
+      "description": "剧本元信息",
+      "required": ["title", "source_novel"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "description": "剧本标题" },
+        "source_novel": { "type": "string", "minLength": 1, "description": "原著小说名" },
+        "source_author": { "type": ["string", "null"], "description": "原著作者" },
+        "genre": {
+          "type": ["string", "null"],
+          "description": "类型，如 剧情/悬疑/喜剧"
+        },
+        "logline": {
+          "type": ["string", "null"],
+          "description": "一句话故事核心，便于作者/制片快速理解"
+        },
+        "tone": {
+          "type": ["string", "null"],
+          "description": "整体基调，如 阴郁/讽刺/温暖"
+        },
+        "language": {
+          "type": "string",
+          "default": "zh-CN",
+          "description": "剧本语言"
+        },
+        "generated_at": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "生成时间戳"
+        }
+      }
+    },
+    "characters": {
+      "type": "array",
+      "description": "角色表",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^c[0-9]{2,3}$",
+            "description": "角色稳定 id，如 c01。被 scenes.characters_present 与 beats.character_id 引用"
+          },
+          "name": { "type": "string", "minLength": 1, "description": "本名/正式称谓" },
+          "aliases": {
+            "type": "array",
+            "items": { "type": "string" },
+            "default": [],
+            "description": "别名/绰号，用于跨章节归一化"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["protagonist", "antagonist", "supporting", "minor"],
+            "description": "角色定位"
+          },
+          "archetype": {
+            "type": ["string", "null"],
+            "description": "原型，如 反英雄/导师/守门人"
+          },
+          "description": {
+            "type": ["string", "null"],
+            "description": "外形/性格简介"
+          },
+          "voice_traits": {
+            "type": ["string", "null"],
+            "description": "语言风格特征，供 AI 在重写时保持一致"
+          },
+          "arc": {
+            "type": ["string", "null"],
+            "description": "角色弧光，一句话概括人物变化"
+          }
+        }
+      }
+    },
+    "locations": {
+      "type": "array",
+      "description": "场景地点表",
+      "default": [],
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^l[0-9]{2,3}$",
+            "description": "地点稳定 id，被 scenes.heading.location_id 引用"
+          },
+          "name": { "type": "string", "minLength": 1 },
+          "description": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "description": "场景表，按剧本播放顺序排列",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/scene" }
+    },
+    "notes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [],
+      "description": "剧本级备注，如改编思路、风险点"
+    }
+  },
+  "$defs": {
+    "scene": {
+      "type": "object",
+      "required": ["id", "heading", "beats"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^S[0-9]{3,4}$",
+          "description": "场景稳定 id，如 S001。零填充便于排序"
+        },
+        "heading": {
+          "type": "object",
+          "description": "场景头，对应剧本格式 INT./EXT. 地点 - 时间",
+          "required": ["int_ext", "location_id", "time_of_day"],
+          "additionalProperties": false,
+          "properties": {
+            "int_ext": {
+              "type": "string",
+              "enum": ["INT", "EXT", "INT/EXT"],
+              "description": "内景/外景/内外景"
+            },
+            "location_id": {
+              "type": "string",
+              "pattern": "^l[0-9]{2,3}$"
+            },
+            "time_of_day": {
+              "type": "string",
+              "enum": ["DAWN", "MORNING", "DAY", "AFTERNOON", "EVENING", "NIGHT", "LATER", "CONTINUOUS"]
+            }
+          }
+        },
+        "source": {
+          "type": ["object", "null"],
+          "description": "可追溯性：该场景对应原著的位置，方便作者对照打磨",
+          "required": ["chapter_index"],
+          "additionalProperties": false,
+          "properties": {
+            "chapter_index": { "type": "integer", "minimum": 1 },
+            "chapter_title": { "type": ["string", "null"] },
+            "paragraph_range": {
+              "type": "array",
+              "items": { "type": "integer", "minimum": 0 },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "[start, end] 段落索引区间，闭区间"
+            }
+          }
+        },
+        "synopsis": {
+          "type": ["string", "null"],
+          "description": "本场景一句话梗概"
+        },
+        "characters_present": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^c[0-9]{2,3}$"
+          },
+          "default": [],
+          "description": "在场角色 id 列表"
+        },
+        "beats": {
+          "type": "array",
+          "minItems": 1,
+          "description": "场景节拍：动作/对白/旁白/转场的有序序列",
+          "items": { "$ref": "#/$defs/beat" }
+        },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": []
+        }
+      }
+    },
+    "beat": {
+      "type": "object",
+      "required": ["type", "content"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["action", "dialogue", "voiceover", "transition"],
+          "description": "节拍类型：动作描写/对白/画外音/转场"
+        },
+        "character_id": {
+          "type": ["string", "null"],
+          "pattern": "^c[0-9]{2,3}$",
+          "description": "dialogue/voiceover 必须有，action/transition 通常为 null"
+        },
+        "parenthetical": {
+          "type": ["string", "null"],
+          "description": "表演提示，如 (冷笑)、(压低嗓音)"
+        },
+        "content": {
+          "type": "string",
+          "minLength": 1,
+          "description": "正文：动作描写或台词"
+        },
+        "subtext": {
+          "type": ["string", "null"],
+          "description": "潜台词：角色没说出口的真实意图。AI 辅助剧本最有价值的字段之一"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "type": { "enum": ["dialogue", "voiceover"] } }
+          },
+          "then": {
+            "required": ["character_id"],
+            "properties": {
+              "character_id": { "type": "string" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
