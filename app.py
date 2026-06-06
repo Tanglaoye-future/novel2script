@@ -18,7 +18,7 @@ except ImportError:
     pass
 
 from backend.core.llm import LLMError, get_provider
-from backend.core.pipeline import ConvertOptions, convert_novel
+from backend.core.pipeline import ConvertOptions, convert_novel, refine_scene
 from backend.core.validator import auto_repair, validate_screenplay
 
 
@@ -169,6 +169,73 @@ def render_scenes(screenplay: dict) -> None:
                 _render_beat(beat, char_map)
             if scene.get("source"):
                 st.caption(f"📌 原著定位：第 {scene['source'].get('chapter_index')} 章 / 段落 {scene['source'].get('paragraph_range')}")
+            _render_refine_widget(scene, screenplay)
+
+
+def _render_refine_widget(scene: dict, screenplay: dict) -> None:
+    """场景级 AI 重写按钮：差异化亮点。"""
+    sid = scene["id"]
+    with st.container():
+        st.markdown("---")
+        st.markdown("🪄 **AI 重写这场戏**")
+        instruction = st.text_input(
+            "重写方向（例如：让对白更克制 / 加强压迫感 / 把动作改少）",
+            key=f"refine_input_{sid}",
+            placeholder="按回车提交…",
+        )
+        cols = st.columns([1, 1, 6])
+        with cols[0]:
+            do_refine = st.button("✨ 重写", key=f"refine_btn_{sid}", type="secondary")
+        with cols[1]:
+            if st.session_state.get(f"refine_backup_{sid}"):
+                if st.button("↩️ 撤销", key=f"undo_btn_{sid}"):
+                    _undo_refine(sid)
+                    st.rerun()
+
+        if do_refine and instruction.strip():
+            _run_refine(scene, instruction, screenplay)
+
+
+def _run_refine(scene: dict, instruction: str, screenplay: dict) -> None:
+    sid = scene["id"]
+    provider_name = "deepseek" if os.getenv("DEEPSEEK_API_KEY") else "fake"
+    try:
+        provider = get_provider(provider_name)
+    except LLMError as exc:
+        st.error(f"LLM 初始化失败：{exc}")
+        return
+
+    try:
+        with st.spinner(f"重写 {sid}…"):
+            new_scene = refine_scene(scene, instruction, screenplay=screenplay, provider=provider)
+    except (LLMError, ValueError) as exc:
+        st.error(f"重写失败：{exc}")
+        return
+
+    # 备份原 scene 以便撤销
+    st.session_state[f"refine_backup_{sid}"] = scene.copy()
+    # 原地替换 screenplay 里的对应场景
+    for i, s in enumerate(st.session_state.screenplay["scenes"]):
+        if s["id"] == sid:
+            st.session_state.screenplay["scenes"][i] = new_scene
+            break
+    # 重新跑校验
+    report = validate_screenplay(st.session_state.screenplay)
+    st.session_state.validation = {"ok": report.ok, "errors": report.errors, "warnings": report.warnings}
+    st.success(f"{sid} 已重写。展开场景查看新版本。")
+    st.rerun()
+
+
+def _undo_refine(sid: str) -> None:
+    backup = st.session_state.pop(f"refine_backup_{sid}", None)
+    if backup is None:
+        return
+    for i, s in enumerate(st.session_state.screenplay["scenes"]):
+        if s["id"] == sid:
+            st.session_state.screenplay["scenes"][i] = backup
+            break
+    report = validate_screenplay(st.session_state.screenplay)
+    st.session_state.validation = {"ok": report.ok, "errors": report.errors, "warnings": report.warnings}
 
 
 def _render_beat(beat: dict, char_map: dict[str, str]) -> None:
