@@ -99,6 +99,14 @@ def render_input_section() -> str:
             key="novel_text_area",
             placeholder="第一章 …\n\n正文…\n\n第二章 …\n\n…",
         )
+        if text:
+            chapters_est = text.count("第")  # rough heuristic
+            st.caption(
+                f"已输入 {len(text):,} 字符"
+                f"（估计 {max(1, chapters_est)} 章，约 {len(text) * 2 // 1000:,}k tokens）"
+            )
+            if len(text) > 100_000:
+                st.warning("文本较长（>10 万字符），转换可能需要数分钟。建议先截取前 5 章测试。")
 
     with tab_upload:
         upload = st.file_uploader("上传 UTF-8 文本文件", type=["txt", "md"], key="upload_widget")
@@ -302,6 +310,13 @@ def main() -> None:
     if "screenplay" in st.session_state:
         st.subheader("③ 转换结果")
         render_validation(st.session_state.validation)
+        # reset button
+        cols_reset = st.columns([1, 8])
+        with cols_reset[0]:
+            if st.button("🗑️ 清除结果", type="secondary", key="reset_btn"):
+                for k in ("screenplay", "validation", "novel_text"):
+                    st.session_state.pop(k, None)
+                st.rerun()
         tab_scenes, tab_yaml = st.tabs(["🎭 场景视图", "📄 YAML 源码"])
         with tab_scenes:
             render_scenes(st.session_state.screenplay)
