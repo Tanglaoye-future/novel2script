@@ -20,7 +20,12 @@ from dataclasses import dataclass
 
 from .chapter_parser import Chapter, parse_chapters
 from .llm import LLMError, LLMProvider, get_provider
-from .prompts import CHAPTER_TO_SCENES_SYSTEM, build_chapter_user_prompt
+from .prompts import (
+    CHAPTER_TO_SCENES_SYSTEM,
+    SCENE_REFINE_SYSTEM,
+    build_chapter_user_prompt,
+    build_refine_user_prompt,
+)
 
 log = logging.getLogger(__name__)
 
@@ -141,6 +146,42 @@ def _convert_chapter(
         )
         scene.setdefault("notes", [])
     return chunk
+
+
+def refine_scene(
+    scene: dict,
+    instruction: str,
+    *,
+    screenplay: dict,
+    provider: LLMProvider | None = None,
+) -> dict:
+    """对单个场景做 AI 重写。
+
+    保留 id 与 source 字段不变，由 LLM 调整 beats / synopsis 让戏更紧凑。
+    screenplay 用于抽取角色的 voice_traits，作为重写约束注入 prompt。
+    """
+    if not instruction or not instruction.strip():
+        raise ValueError("refine 指令不能为空。")
+    provider = provider or get_provider()
+
+    char_voice_hints = {
+        c["id"]: c.get("voice_traits") or ""
+        for c in screenplay.get("characters", [])
+        if c["id"] in set(scene.get("characters_present", []))
+    }
+
+    user_prompt = build_refine_user_prompt(scene, instruction, char_voice_hints)
+    resp = provider.generate_json(SCENE_REFINE_SYSTEM, user_prompt, temperature=0.6)
+    try:
+        new_scene = json.loads(resp.text)
+    except json.JSONDecodeError as exc:
+        raise LLMError(f"refine 返回的 JSON 不合法：{exc}") from exc
+
+    # 强制保留 id 与 source（防止 LLM 改写关键字段）
+    new_scene["id"] = scene["id"]
+    if scene.get("source"):
+        new_scene["source"] = scene["source"]
+    return new_scene
 
 
 def _format_scene_id(n: int) -> str:

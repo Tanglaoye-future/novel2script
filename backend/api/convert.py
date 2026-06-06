@@ -12,7 +12,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
 from backend.core.llm import LLMError, get_provider
-from backend.core.pipeline import ConvertOptions, convert_novel
+from backend.core.pipeline import ConvertOptions, convert_novel, refine_scene
 from backend.core.validator import auto_repair, validate_screenplay
 
 log = logging.getLogger(__name__)
@@ -74,3 +74,40 @@ def convert(req: ConvertRequest) -> ConvertResponse:
             "warnings": report.warnings,
         },
     )
+
+
+class RefineRequest(BaseModel):
+    screenplay: dict = Field(..., description="当前完整的剧本 dict（含 characters）")
+    scene_id: str = Field(..., min_length=1, description="要重写的场景 id，如 S003")
+    instruction: str = Field(..., min_length=1, description="重写方向，如「让对白更克制」")
+    provider: str | None = None
+
+
+class RefineResponse(BaseModel):
+    scene: dict
+
+
+@router.post("/refine", response_model=RefineResponse)
+def refine(req: RefineRequest) -> RefineResponse:
+    scene = next((s for s in req.screenplay.get("scenes", []) if s.get("id") == req.scene_id), None)
+    if scene is None:
+        raise HTTPException(status_code=404, detail=f"未找到场景 id={req.scene_id}")
+
+    try:
+        provider = get_provider(req.provider)
+    except LLMError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+
+    try:
+        new_scene = refine_scene(
+            scene,
+            req.instruction,
+            screenplay=req.screenplay,
+            provider=provider,
+        )
+    except LLMError as exc:
+        raise HTTPException(status_code=502, detail=f"LLM 重写失败：{exc}") from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    return RefineResponse(scene=new_scene)
