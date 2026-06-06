@@ -1,0 +1,127 @@
+schema_version: "0.1"
+
+meta:
+  title: 狂人日记
+  source_novel: 狂人日记
+  source_author: 鲁迅
+  genre: 心理剧情
+  logline: 一个被族人视作"狂人"的男子，在病中读出了仁义道德背后的"吃人"二字。
+  tone: 阴郁 / 讽刺 / 压抑
+  language: zh-CN
+  generated_at: "2026-06-06T20:00:00+08:00"
+
+characters:
+  - id: c01
+    name: 我
+    aliases: ["狂人"]
+    role: protagonist
+    archetype: 觉醒者
+    description: 三十余岁的旧式读书人，近来神思恍惚，对周遭族人产生强烈被害幻觉
+    voice_traits: 句子短促、跳跃，夹杂引经据典；偶尔以怀疑句结尾
+    arc: 从恐惧→质疑→看穿"吃人"→呼喊"救救孩子"
+
+  - id: c02
+    name: 大哥
+    aliases: ["哥哥"]
+    role: antagonist
+    archetype: 守门人
+    description: 主角的兄长，恪守家族礼法，对主角的"病"既忧又惧
+    voice_traits: 温言压制，话里有话
+    arc: 始终维护旧秩序，是主角眼中"吃人者"的代表
+
+  - id: c03
+    name: 何先生
+    aliases: ["医生"]
+    role: supporting
+    description: 上门诊治的老中医
+    voice_traits: 慢条斯理，行话居多
+
+locations:
+  - id: l01
+    name: 主角的卧房
+    description: 昏暗的旧式厢房，月光自窗棂渗入
+  - id: l02
+    name: 院落
+    description: 青砖铺地的内院，廊下有数人交谈
+
+scenes:
+  - id: S001
+    heading:
+      int_ext: INT
+      location_id: l01
+      time_of_day: NIGHT
+    source:
+      chapter_index: 1
+      chapter_title: 第一章
+      paragraph_range: [0, 4]
+    synopsis: 主角在月光下惊觉今夜"分外清醒"，回忆三十年来未见的月光。
+    characters_present: [c01]
+    beats:
+      - type: action
+        content: 月光透过窗纸落在主角床沿。主角缓缓坐起，瞪大双眼望向窗外。
+      - type: voiceover
+        character_id: c01
+        content: 今天晚上，很好的月光。
+        subtext: 这是"清醒"的开始，他第一次怀疑此前三十年的麻木。
+      - type: action
+        content: 主角下床，赤足走到窗前，伸手触碰冷窗棂。
+      - type: dialogue
+        character_id: c01
+        parenthetical: (低声自语)
+        content: 我不见他，已是三十多年；今天见了，精神分外爽快。
+        subtext: 月光成为"觉醒"的隐喻，他自己尚未意识到这意味着什么。
+
+  - id: S002
+    heading:
+      int_ext: EXT
+      location_id: l02
+      time_of_day: MORNING
+    source:
+      chapter_index: 2
+      chapter_title: 第二章
+      paragraph_range: [0, 8]
+    synopsis: 清晨踏入院落，主角察觉赵贵翁等人的眼神异样，开始疑心被算计。
+    characters_present: [c01]
+    beats:
+      - type: action
+        content: 主角推门而出，廊下三五人立刻噤声，目光齐齐落在他身上。
+      - type: dialogue
+        character_id: c01
+        parenthetical: (心中)
+        content: 他们的眼色，全同别人不同。
+        subtext: 偏执从此被点燃；亦是他读出"吃人"两字的前奏。
+
+  - id: S003
+    heading:
+      int_ext: INT
+      location_id: l01
+      time_of_day: EVENING
+    source:
+      chapter_index: 3
+      chapter_title: 第三章
+      paragraph_range: [12, 30]
+    synopsis: 何先生为主角把脉。主角看穿这是"试肉肥瘦"的伪装。
+    characters_present: [c01, c02, c03]
+    beats:
+      - type: action
+        content: 何先生指尖搭在主角腕上，眉头微皱。大哥站在床边，神色凝重。
+      - type: dialogue
+        character_id: c03
+        content: 不要乱想。静静的养几天，就好了。
+        subtext: 安抚的话术，在主角听来却是"养肥再吃"的暗号。
+      - type: dialogue
+        character_id: c01
+        parenthetical: (盯着何先生)
+        content: 你想吃我，还想叫别人也帮着吃我。
+        subtext: 把幻觉与现实合一，是疯狂也是清醒。
+      - type: dialogue
+        character_id: c02
+        parenthetical: (强作镇定)
+        content: 这病要紧，不要胡说。
+        subtext: 兄长的本能反应：先维护秩序，再处置异端。
+      - type: transition
+        content: 渐隐至黑。
+
+notes:
+  - 本剧本由示例生成，仅展示 Schema 字段用法
+  - "潜台词字段（subtext）是改编自小说的关键：原文以独白呈现的内心活动，在剧本中需通过表演与潜台词传达"
