@@ -15,7 +15,7 @@
 | 文件 | 输入 | 生成方式 | 说明 |
 |---|---|---|---|
 | `kuangrenriji_handcrafted.yaml` | 《狂人日记》前 3 章 | 手工撰写 | Schema 字段全覆盖的样例，亦是 `schema/example.yaml` 的副本，用于演示**目标输出形态** |
-| `the_lighthouse_keeper.yaml` | `input/the_lighthouse_keeper.txt` | DeepSeek 实跑（PR12 第二步） | 真实 AI 生成产物，反映工具实际输出 |
+| `the_lighthouse_keeper.yaml` | `input/the_lighthouse_keeper.txt` | DeepSeek 实跑 (2026-06-07) | 真实 AI 生成产物，4 章→6 场景，0 error 0 warning |
 
 ## 重新生成 output
 
