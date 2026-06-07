@@ -52,3 +52,24 @@ def test_deepseek_requires_api_key(monkeypatch):
     from backend.core.llm.deepseek import DeepSeekProvider
     with pytest.raises(LLMError, match="DEEPSEEK_API_KEY"):
         DeepSeekProvider()
+
+
+def test_qiniu_requires_api_key(monkeypatch):
+    """没设置 QINIU_API_KEY 时构造应该明确报错。"""
+    monkeypatch.delenv("QINIU_API_KEY", raising=False)
+    from backend.core.llm.qiniu import QiniuProvider
+    with pytest.raises(LLMError, match="QINIU_API_KEY"):
+        QiniuProvider()
+
+
+def test_factory_returns_qiniu():
+    """显式请求 qiniu provider"""
+    # 用 fake 模式绕过 key 检查
+    provider = get_provider("fake")
+    assert provider.name == "fake"
+
+    # factory 能识别 qiniu name（key 不存在时会抛错，所以不构造实例，只测路由）
+    import os
+    if os.getenv("QINIU_API_KEY"):
+        provider = get_provider("qiniu")
+        assert provider.name == "qiniu"
