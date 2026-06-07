@@ -13,7 +13,7 @@
 | 功能 | 说明 |
 |---|---|
 | 📖 自动识别章节 | 正则 + 启发式，支持中文/英文/特殊章节名 |
-| 🎬 章节 → 场景 | DeepSeek LLM 将小说逐章转换为结构化剧本 |
+| 🎬 章节 → 场景 | **七牛云 AI (Qwen3-235B)** 将小说逐章转换为结构化剧本 |
 | 🎭 节拍序列 (beats) | action / dialogue / voiceover / transition 四类，含潜台词字段 |
 | 📋 YAML + JSON Schema | 严格校验输出结构，非法输出自动拒绝 |
 | 🔁 场景级 AI 重写 | 单场景一键润色，配撤销。不改别的场景 |
@@ -38,10 +38,10 @@ cd novel2script
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 
-# 2. 配置 DeepSeek API key
+# 2. 配置 API key（七牛云 AI 推理服务，默认）
 cp .env.example .env
-# 编辑 .env，填入 DEEPSEEK_API_KEY=sk-...
-# 注册入口：https://platform.deepseek.com
+# 编辑 .env，填入 QINIU_API_KEY=sk-...
+# 注册入口：https://developer.qiniu.com/aitokenapi
 
 # 3. 启动（三选一）
 # 方式 A：Streamlit 交互 UI（推荐）
@@ -111,7 +111,7 @@ uvicorn backend.api.main:app --reload --port 8000
 | pydantic | 数据模型/校验 | MIT |
 | pyyaml | YAML 序列化 | MIT |
 | jsonschema | JSON Schema 校验 | MIT |
-| openai | DeepSeek API 调用（OpenAI 兼容协议） | Apache-2.0 |
+| openai | 七牛云 AI / DeepSeek API 调用（OpenAI 兼容协议） | Apache-2.0 |
 | python-dotenv | 环境变量加载 | BSD |
 | pytest | 测试框架（dev 依赖） | MIT |
 
@@ -136,7 +136,8 @@ uvicorn backend.api.main:app --reload --port 8000
 │   │   ├── validator.py          # 两层校验 + auto_repair
 │   │   └── llm/                  # Provider 适配层
 │   │       ├── base.py           #   抽象接口
-│   │       ├── deepseek.py       #   DeepSeek (OpenAI 兼容)
+│   │       ├── deepseek.py       #   DeepSeek (备用)
+│   │       ├── qiniu.py          #   七牛云 AI (默认)
 │   │       └── fake.py           #   离线占位
 │   └── tests/                    # 45 条自动测试
 ├── schema/

@@ -51,16 +51,30 @@ def render_sidebar() -> dict:
 
     st.sidebar.markdown("---")
     st.sidebar.header("🔌 LLM 状态")
-    provider_name = st.sidebar.selectbox(
-        "Provider",
-        options=["deepseek", "fake (离线 demo)"],
-        index=0 if os.getenv("DEEPSEEK_API_KEY") else 1,
-    )
-    real_provider = "deepseek" if provider_name.startswith("deepseek") else "fake"
+    has_qiniu = bool(os.getenv("QINIU_API_KEY"))
+    has_ds = bool(os.getenv("DEEPSEEK_API_KEY"))
+    default_idx = 0
+    provider_options = []
+    if has_qiniu:
+        provider_options.append("qiniu (七牛云)")
+    else:
+        provider_options.append("qiniu (需配置 key)")
+        default_idx = 2 if not has_ds else 1
+    if has_ds:
+        provider_options.append("deepseek")
+    else:
+        provider_options.append("deepseek (需配置 key)")
+    provider_options.append("fake (离线 demo)")
+    provider_name = st.sidebar.selectbox("Provider", options=provider_options, index=default_idx)
+    real_provider = provider_name.split()[0]  # "qiniu" | "deepseek" | "fake"
 
-    if real_provider == "deepseek":
-        has_key = bool(os.getenv("DEEPSEEK_API_KEY"))
-        if has_key:
+    if real_provider == "qiniu":
+        if has_qiniu:
+            st.sidebar.success("七牛云 QINIU_API_KEY 已配置")
+        else:
+            st.sidebar.warning("未检测到 QINIU_API_KEY。请在 .env 中配置后重启。")
+    elif real_provider == "deepseek":
+        if has_ds:
             st.sidebar.success("DEEPSEEK_API_KEY 已配置")
         else:
             st.sidebar.warning("未检测到 DEEPSEEK_API_KEY。请在 .env 中配置后重启。")
@@ -206,7 +220,7 @@ def _render_refine_widget(scene: dict, screenplay: dict) -> None:
 
 def _run_refine(scene: dict, instruction: str, screenplay: dict) -> None:
     sid = scene["id"]
-    provider_name = "deepseek" if os.getenv("DEEPSEEK_API_KEY") else "fake"
+    provider_name = "qiniu" if os.getenv("QINIU_API_KEY") else ("deepseek" if os.getenv("DEEPSEEK_API_KEY") else "fake")
     try:
         provider = get_provider(provider_name)
     except LLMError as exc:

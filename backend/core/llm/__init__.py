@@ -27,7 +27,7 @@ def get_provider(name: str | None = None, **kwargs) -> LLMProvider:
 
     name 优先级：参数 > 环境变量 LLM_PROVIDER > 默认 'deepseek'
     """
-    name = (name or os.getenv("LLM_PROVIDER") or "deepseek").lower()
+    name = (name or os.getenv("LLM_PROVIDER") or "qiniu").lower()
 
     if name == "fake":
         return FakeProvider(**kwargs)
@@ -36,4 +36,8 @@ def get_provider(name: str | None = None, **kwargs) -> LLMProvider:
         from .deepseek import DeepSeekProvider
         return DeepSeekProvider(**kwargs)
 
-    raise LLMError(f"未知 LLM provider: {name!r}。已支持: deepseek, fake")
+    if name == "qiniu":
+        from .qiniu import QiniuProvider
+        return QiniuProvider(**kwargs)
+
+    raise LLMError(f"未知 LLM provider: {name!r}。已支持: qiniu, deepseek, fake")
