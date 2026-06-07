@@ -1,0 +1,310 @@
+schema_version: '0.1'
+meta:
+  title: 守灯人
+  source_novel: 守灯人
+  source_author: Novel2Script 演示原创 (CC0)
+  genre: 情感剧情
+  logline: null
+  tone: 克制 / 沉静 / 暖意
+  language: zh-CN
+  generated_at: '2026-06-07T05:43:46.794482+00:00'
+characters:
+- id: c01
+  name: 林海舟
+  aliases:
+  - 林叔
+  role: protagonist
+  archetype: 沉默的守塔人
+  description: 四十多岁，眉骨高，嘴唇薄，话少
+  voice_traits: 低沉、简洁、克制
+  arc: 从封闭到逐渐接受他人
+- id: c02
+  name: 陈未
+  aliases: []
+  role: supporting
+  archetype: 热心的年轻报务员
+  description: 二十出头，年轻，主动
+  voice_traits: 年轻、诚恳、略带紧张
+  arc: 从旁观者到参与者
+locations:
+- id: l01
+  name: 灯塔内部
+  description: 灯塔的灯室，有铜把手和齿轮装置
+- id: l02
+  name: 镇上电报局
+  description: 小柜台，报务员工作台
+- id: l03
+  name: 灯塔外礁石
+  description: 灯塔周围的礁石区域，面向大海，能见度低
+scenes:
+- id: S001
+  heading:
+    int_ext: INT
+    location_id: l01
+    time_of_day: EVENING
+  source:
+    chapter_index: 2
+    chapter_title: 第一章 信号
+    paragraph_range:
+    - 1
+    - 5
+  synopsis: 林海舟傍晚例行开灯，齿轮故障，灯光未亮。
+  characters_present:
+  - c01
+  beats:
+  - type: action
+    content: 灯塔灯室。林海舟转动铜把手至「亮」的位置，齿轮深处传来一声「咔」。
+    subtext: null
+  - type: action
+    content: 光柱挣扎了两秒，没有亮起来。
+    subtext: null
+  - type: action
+    content: 林海舟皱起眉。
+    subtext: 担忧，意识到问题严重
+  notes: []
+- id: S002
+  heading:
+    int_ext: INT
+    location_id: l02
+    time_of_day: MORNING
+  source:
+    chapter_index: 2
+    chapter_title: 第一章 信号
+    paragraph_range:
+    - 6
+    - 14
+  synopsis: 林海舟到镇上电报局发电报求助，陈未主动提出陪守，被林海舟拒绝。
+  characters_present:
+  - c01
+  - c02
+  beats:
+  - type: action
+    content: 电报局内，林海舟将电报稿推过柜台。
+    subtext: null
+  - type: action
+    content: 陈未接过去看了一眼，又抬头看林海舟。
+    subtext: 好奇，关心
+  - type: dialogue
+    character_id: c02
+    parenthetical: null
+    content: 林叔，灯塔出了问题？
+    subtext: 想确认情况，表达关心
+  - type: dialogue
+    character_id: c01
+    parenthetical: null
+    content: 齿轮。备件你们这里有吗？
+    subtext: 直接切入问题，不愿多谈
+  - type: action
+    content: 陈未摇头。
+    subtext: 遗憾，知道答案不好
+  - type: dialogue
+    character_id: c02
+    parenthetical: null
+    content: 省城才有，最快得三天。
+    subtext: 告知事实，同时暗示需要帮助
+  - type: action
+    content: 林海舟点点头，转身要走。
+    subtext: 接受现实，准备独自应对
+  - type: dialogue
+    character_id: c02
+    parenthetical: 叫住他
+    content: 林叔。
+    subtext: 犹豫，但决定开口
+  - type: action
+    content: 林海舟回过头。
+    subtext: 意外，等待
+  - type: action
+    content: 陈未咬了咬嘴唇，把电报稿又推回去。
+    subtext: 紧张，鼓起勇气
+  - type: dialogue
+    character_id: c02
+    parenthetical: null
+    content: 三天里我陪你守。
+    subtext: 想帮忙，不想让他一个人
+  - type: action
+    content: 林海舟看着他，过了很久。
+    subtext: 内心挣扎，不习惯接受帮助
+  - type: dialogue
+    character_id: c01
+    parenthetical: null
+    content: 不必。
+    subtext: 拒绝，不想欠人情或连累他人
+  - type: action
+    content: 陈未没有动。
+    subtext: 坚持，不放弃
+  notes: []
+- id: S003
+  heading:
+    int_ext: INT
+    location_id: l01
+    time_of_day: NIGHT
+  source:
+    chapter_index: 3
+    chapter_title: 第二章 沉默
+    paragraph_range:
+    - 1
+    - 1
+  synopsis: 林海舟和陈未在灯塔里度过沉默的一夜，陈未提起往事，林海舟透露妻子去世，最后林海舟让陈未帮忙看灯并道谢。
+  characters_present:
+  - c01
+  - c02
+  beats:
+  - type: action
+    content: 灯塔内，林海舟将备用油灯一盏盏挂上塔顶四周，光线微弱。陈未坐在木箱上，看着林海舟忙碌。
+    subtext: null
+  - type: dialogue
+    character_id: c02
+    parenthetical: null
+    content: 你以前不是这样的。
+    subtext: 陈未在试探林海舟的变化，想了解他为何变得沉默寡言。
+  - type: action
+    content: 林海舟没有停手，继续调整油灯。
+    subtext: null
+  - type: dialogue
+    character_id: c01
+    parenthetical: null
+    content: 以前怎样。
+    subtext: 林海舟明知故问，不愿直接面对过去，用反问掩饰内心的波动。
+  - type: dialogue
+    character_id: c02
+    parenthetical: null
+    content: 以前你不让人进塔。我十岁的时候来送过电报，你站在门口，连门都没让我进。
+    subtext: 陈未在提醒林海舟他们之间的过往，暗示林海舟曾拒人于千里之外。
+  - type: action
+    content: 林海舟终于停下，背对着陈未。窗外海浪拍打岩礁，声音清晰。
+    subtext: null
+  - type: dialogue
+    character_id: c01
+    parenthetical: null
+    content: 那时候我妻子刚走。我谁也不想见。
+    subtext: 林海舟第一次向陈未透露内心的伤痛，解释自己过去的冷漠。
+  - type: action
+    content: 陈未没有再说话。沉默持续。
+    subtext: null
+  - type: action
+    content: 过了很久，林海舟回过身，从口袋里掏出一只旧怀表，放在陈未面前的木箱上。
+    subtext: null
+  - type: dialogue
+    character_id: c01
+    parenthetical: null
+    content: 替我盯着这个。每隔三分钟，把外面这盏灯调一下角度。我要去下面睡两个小时。
+    subtext: 林海舟开始信任陈未，将重要任务交给他，以此建立联系。
+  - type: action
+    content: 陈未接过怀表，没有问为什么。
+    subtext: null
+  - type: action
+    content: 林海舟下塔前停住。
+    subtext: null
+  - type: dialogue
+    character_id: c01
+    parenthetical: null
+    content: 陈未。
+    subtext: 林海舟犹豫后决定表达感谢。
+  - type: dialogue
+    character_id: c02
+    parenthetical: null
+    content: 嗯？
+    subtext: 陈未意外林海舟会主动叫他，带着期待。
+  - type: dialogue
+    character_id: c01
+    parenthetical: null
+    content: 谢谢。
+    subtext: 林海舟放下心防，真诚感谢陈未的陪伴和帮助。
+  notes: []
+- id: S004
+  heading:
+    int_ext: INT
+    location_id: l01
+    time_of_day: EVENING
+  source:
+    chapter_index: 4
+    chapter_title: 第三章 光
+    paragraph_range:
+    - 1
+    - 3
+  synopsis: 海上起雾，林海舟在塔顶听到货轮汽笛，意识到危险。
+  characters_present:
+  - c01
+  - c02
+  beats:
+  - type: action
+    content: 灯塔内，林海舟在塔顶踱步。窗外白雾弥漫，能见度极低。远处传来汽笛声，一声、两声、三声。
+    subtext: null
+  - type: action
+    content: 林海舟冲到瞭望窗前，但窗外只有浓雾，什么也看不见。
+    subtext: null
+  - type: dialogue
+    character_id: c01
+    parenthetical: 喊
+    content: 陈未！
+    subtext: 我需要你帮忙，情况紧急。
+  notes: []
+- id: S005
+  heading:
+    int_ext: INT
+    location_id: l01
+    time_of_day: CONTINUOUS
+  source:
+    chapter_index: 4
+    chapter_title: 第三章 光
+    paragraph_range:
+    - 4
+    - 6
+  synopsis: 林海舟命令陈未将所有灯拿出，摆到礁石上。
+  characters_present:
+  - c01
+  - c02
+  beats:
+  - type: action
+    content: 陈未抱着第六罐煤油出现在塔下。
+    subtext: null
+  - type: dialogue
+    character_id: c01
+    parenthetical: 命令
+    content: 所有灯都拿出来。所有的。放到外面礁石上。一排。
+    subtext: 我们必须制造足够的光，引导船只。
+  - type: action
+    content: 陈未怔了一下，但没问。两人将灯塔里所有油灯、马灯、提灯拎出，沿着礁石外缘摆成弧线。煤油不够，林海舟搬来自己卧房的油桶。
+    subtext: null
+  notes: []
+- id: S006
+  heading:
+    int_ext: EXT
+    location_id: l03
+    time_of_day: EVENING
+  source:
+    chapter_index: 4
+    chapter_title: 第三章 光
+    paragraph_range:
+    - 7
+    - 12
+  synopsis: 林海舟点亮油灯，汽笛声渐近，他数着灯盏，最终船转向，林海舟绝望蹲下。
+  characters_present:
+  - c01
+  - c02
+  beats:
+  - type: action
+    content: 第一盏灯点亮，雾中汽笛又响一声，更近了。
+    subtext: null
+  - type: action
+    content: 林海舟一边点灯一边低声数数：五盏、六盏、七盏……
+    subtext: 他紧张地计算着光线的强度。
+  - type: action
+    content: 点到第十三盏时，汽笛声由近转远，船拐了方向。
+    subtext: null
+  - type: action
+    content: 林海舟在最后一盏灯前蹲下，肩膀塌下去，像被海水浸透的石头。
+    subtext: 他感到无力，灯塔的灯没亮，他失败了。
+  - type: action
+    content: 陈未走到他身边，蹲下，将自己的外套披在林海舟背上。
+    subtext: null
+  - type: dialogue
+    character_id: c02
+    parenthetical: 轻声
+    content: 林叔，它看见了。
+    subtext: 我想安慰你，船得救了，别太自责。
+  - type: action
+    content: 林海舟没有抬头。雾中，第十三盏灯的火苗轻轻晃了一下。灯塔本身，依然是黑的。
+    subtext: null
+  notes: []
+notes: []
