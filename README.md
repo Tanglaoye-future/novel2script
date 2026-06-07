@@ -4,7 +4,7 @@
 
 > **七牛云 1024 创作大赛 · 题目三** 参赛作品  
 > 仓库：[GitHub](https://github.com/Tanglaoye-future/novel2script)  
-> Demo 视频：_待录制_
+> Demo：[Bilibili](https://www.bilibili.com/video/BV14BEb6yE2p/)
 
 ---
 
@@ -25,7 +25,9 @@
 
 ## 🎥 Demo 视频
 
-> 视频链接：_待录制后补充_
+[![Demo 视频](https://img.shields.io/badge/Bilibili-演示视频-00A1D6?logo=bilibili)](https://www.bilibili.com/video/BV14BEb6yE2p/)
+
+> 完整演示：小说输入 → 章节解析 → AI 转换 → 场景卡片浏览 → 场景级重写 → YAML 下载。
 
 ---
 
